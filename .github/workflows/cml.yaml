@@ -1,0 +1,16 @@
+name: wine-workflow
+on: [push]
+jobs:
+  train-and-report:
+    runs-on: ubuntu-latest
+    container: docker://ghcr.io/iterative/cml:0-dvc2-base1
+    env:
+      REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+      
+          pip install -r requirements.txt
+          python wine.py  # generate plot.png
+          echo "Model Evaluation"
+          cat evaluation.txt
