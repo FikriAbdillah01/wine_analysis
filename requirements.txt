@@ -1,7 +1,6 @@
 pandas
-scikit-learn
+sklearn
 seaborn
 matplotlib
 scipy
 numpy
-warnings
