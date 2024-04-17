@@ -78,15 +78,26 @@ from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_sc
 X_train, X_test, y_train, y_test = train_test_split(X,y,random_state=42)
 
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
-def evaluation_score (test_var, prediction = rfc.predict(X_tst_sc)):
-    rfc_acc = accuracy_score(test_var, prediction)
-    conf_mat = confusion_matrix(test_var, prediction)
-    plt.figure(figsize = (4,4))
-    sns.heatmap(conf_mat, annot = True)
-    print(f'accuracy score of Random Forest Classifier model is {rfc_acc}')
-    print(classification_report(test_var, prediction))
-    
-with open('evaluation.txt','w') as outfile:
-    outfile.write(evaluation_score(y_test))
-    
+#def evaluation_score (test_var, prediction = rfc.predict(X_tst_sc)):
+#    rfc_acc = accuracy_score(test_var, prediction)
+#    conf_mat = confusion_matrix(test_var, prediction)
+#    plt.figure(figsize = (4,4))
+#    sns.heatmap(conf_mat, annot = True)
+#    print(f'accuracy score of Random Forest Classifier model is {rfc_acc}')
+#    print(classification_report(test_var, prediction))
+
+prediction = rfc.predict(X_tst_sc)
+rfc_acc = accuracy_score(y_test, prediction)
+conf_mat = confusion_matrix(y_test, prediction)
+
+with open('accuracy.txt','w') as outfile:
+    outfile.write(f'Accuracy of the model is: {rfc_acc}')
+
+with open('classfication_report','w') as outfile:
+    outfile.write(classification_report(y_test, prediction)
+
+plt.figure(figsize(5,5))
+sns.heatmap(conf_mat, annot = True)
+plt.savefig('confusion_mat.jpg', dpi = 100)
+
 
