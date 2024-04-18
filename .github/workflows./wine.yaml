@@ -1,0 +1,18 @@
+name: wine
+on: [push]
+jobs:
+  train-and-report:
+    runs-on: ubuntu-latest
+    container: docker://ghcr.io/iterative/cml:0-dvc2-base1
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          pip install -r requirements.txt
+          python wine.py  # generate plot.png
+ 
+          # Create CML report
+          cat accuracy.txt >> report.md
+          cat confusion_mat.jpg >> report.md
+          cml comment create report.md
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
