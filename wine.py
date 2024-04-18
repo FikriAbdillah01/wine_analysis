@@ -96,7 +96,7 @@ with open('accuracy.txt','w') as outfile:
 with open('classfication_report','w') as outfile:
     outfile.write(classification_report(y_test, prediction)
 
-plt.figure(figsize(5,5))
+plt.figure(figsize=(5,5))
 sns.heatmap(conf_mat, annot = True)
 plt.savefig('confusion_mat.jpg', dpi = 100)
 
