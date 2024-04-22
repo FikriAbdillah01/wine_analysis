@@ -42,17 +42,21 @@ def densityplot(dataframe, x_plot, y_plot):
     
 densityplot(df, ['pH','citric acid', 'volatile acidity', 'density'], None)
 plt.savefig('densityplot.jpg', dpi = 120)
+plt.close()
 
 densityplot(df, ['residual sugar', 'fixed acidity', 'total sulfur dioxide', 'quality', 'alcohol'], None)
 plt.savefig('densityplot2.jpg', dpi = 120)
+plt.close()
 
 densityplot(df, ['alcohol', 'volatile acidity', 'sulphates', 'citric acid'], None)
 plt.savefig('densityhighestinfluence.jpg', dpi = 120)
+plt.close()
 
 fig = plt.figure(figsize=(9,9))
 sns.heatmap(data = df.drop('Id', axis =1).corr(), cmap = 'RdYlBu', annot=True)
 fig.tight_layout()
 plt.savefig('correlationdata.jpg', dpi = 300)
+plt.close()
 
 from sklearn.preprocessing import LabelEncoder
 
@@ -68,6 +72,7 @@ df2['quality_code'] = encode.fit_transform(df2['quality'])
 fig = plt.figure(figsize = (7,7))
 sns.countplot(df2, x = df2['quality'])
 plt.savefig('countplot.jpg', dpi = 120)
+plt.close()
 
 
 # Seperate Dataset
@@ -98,5 +103,5 @@ with open('classfication_report','w') as outfile:
 
 sns.heatmap(conf_mat, annot = True)
 plt.savefig('confusion_mat.jpg', dpi = 100)
-
+plt.close
 
