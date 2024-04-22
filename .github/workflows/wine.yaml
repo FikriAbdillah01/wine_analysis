@@ -13,10 +13,10 @@ jobs:
           cat metrics.txt >> report.md
 
           echo  "## Data Visualization" >> report.md
-          cml-publish feature_importance.png --md >> report.md
-          cml-publish residuals.png --md >> report.md
+          echo '![](./feature_importance.png "feature importance" )' >> report.md
+          echo '![](./publish residuals.png "Residuals")' >> report.md
 
-          cml-send-comment report.md
+          cml comment create report.md
  
           # Create CML report
           #cat metrics.txt >> report.md
