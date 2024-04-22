@@ -95,13 +95,14 @@ prediction = rfc.predict(X_tst_sc)
 rfc_acc = accuracy_score(y_test, prediction)
 conf_mat = confusion_matrix(y_test, prediction)
 
+sns.heatmap(conf_mat, annot = True)
+plt.savefig('confusion_mat.jpg', dpi = 100)
+plt.close()
+
 with open('accuracy.txt','w') as outfile:
     outfile.write(f'Accuracy of the model is: {rfc_acc}')
 
 with open('classfication_report','w') as outfile:
     outfile.write(classification_report(y_test, prediction)
 
-sns.heatmap(conf_mat, annot = True)
-plt.savefig('confusion_mat.jpg', dpi = 100)
-plt.close
 
