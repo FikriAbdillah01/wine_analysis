@@ -13,7 +13,7 @@ jobs:
           cat metrics.txt >> report.md
 
           echo "## Data Visualization" >> report.md
-          echo '![](./feature_importance.png "feature importance" )' >> report.md
+          echo '![](./feature_importance.png "feature importance")' >> report.md
           echo '![](./residuals.png "Residuals")' >> report.md
           cml comment create report.md
  
