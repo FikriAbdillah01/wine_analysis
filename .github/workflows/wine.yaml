@@ -9,6 +9,7 @@ jobs:
       - run: |
           pip install -r requirements.txt
           python train.py 
+          cml comment create report.md
           echo "## Model Metrics" >> report.md
           cat metrics.txt >> report.md
  
