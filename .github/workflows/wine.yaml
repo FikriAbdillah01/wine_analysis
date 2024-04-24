@@ -13,8 +13,8 @@ jobs:
           cat metrics.txt >> report.md
 
           echo "## Data Visualization" >> report.md
-          echo '![](train.py/feature_importance.png)' >> report.md
-          echo '![](train.py/residuals.png)' >> report.md
+          echo '![](./feature_importance.png)' >> report.md
+          echo '![](./residuals.png)' >> report.md
           cml comment create report.md
  
           # Create CML report
