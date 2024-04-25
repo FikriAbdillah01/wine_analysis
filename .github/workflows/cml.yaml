@@ -3,14 +3,14 @@ on: [push]
 jobs:
   train-and-report:
     runs-on: ubuntu-latest
-    container: docker://dvcorg/cml-py3:latest
+    container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
       - uses: actions/checkout@v3
-      - uses: iterative/setup-tools@v1
       - run: |
           pip install -r requirements.txt
           python train.py
-          echo "## Feature Importance" >> report.md
+          
+  
           echo '![](./feature_importance.png "Feature Importance")' >> report.md
           echo "## Model Metrics" >> report.md
           cat metrics.txt >> report.md
@@ -18,9 +18,6 @@ jobs:
 
           
  
-          # Create CML report
-          #cat metrics.txt >> report.md
-          #echo '![](./plot.png "Confusion Matrix")' >> report.md
-         # cml comment create report.md
+          
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
