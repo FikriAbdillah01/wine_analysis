@@ -11,7 +11,7 @@ jobs:
           python train.py
           
   
-          echo '![train.py](./feature_importance.png "Feature Importance")' >> report.md
+          echo '![](./feature_importance.png "Feature Importance")' >> report.md
           echo "## Model Metrics" >> report.md
           cat metrics.txt >> report.md
           cml comment update report.md
