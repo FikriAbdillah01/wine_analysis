@@ -92,9 +92,9 @@ This subpage dedicated to discuss about the most important psychochemical substa
 
 - This project uses Pearson correlation to determine the influence of the ’Quality’ label on other features with a value range of -1 to 1. Based on Figure 2.1, there are four features that have a large correlation with the ’Quality’ label. Pearson Correlation is statistical measure that used to find out strength of the relationship between two variables which represented by its coefficient r. The coefficient can be expressed as
 
-    $$r = \frac{\sum_{i = 1}^{p} (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i = 1}^{p} (x_i - \bar{x})^2 (y_i - \bar{y})^2}}$$
+$$r = \frac{\sum_{i = 1}^{p} (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i = 1}^{p} (x_i - \bar{x})^2 (y_i - \bar{y})^2}}$$
 
-    where $x_i$ is the value of i-th index in the feature, $\bar{x}$ is the feature mean, $y_i$ is the value of the label at i-th index, dan $\bar{y}$ is the mean of the label.
+where $x_i$ is the value of i-th index in the feature, $\bar{x}$ is the feature mean, $y_i$ is the value of the label at i-th index, dan $\bar{y}$ is the mean of the label.
 
 
 <p align = 'center'>
