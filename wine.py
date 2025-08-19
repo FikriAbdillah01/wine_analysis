@@ -1,107 +1,84 @@
-## Machine Learning Operations Experiment
-
-import pandas as pd
-import numpy as np
-import seaborn as sns
+import pandas as pd 
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
 import matplotlib.pyplot as plt
-import sklearn
-import warnings
-warnings.simplefilter('ignore')
+import seaborn as sns
+import numpy as np
+# Set random seed
+seed = 42
 
-df = pd.read_csv('WineQT.csv')
+################################
+########## DATA PREP ###########
+################################
 
-palette1 = sns.color_palette('RdYlBu')
-def barplot (dataframe, y_plot):
-    i = 0
-    n = 1
-    fig = plt.figure(figsize = (10,7))
-    for i in y_plot:
-        plt.subplot(len(y_plot),1,n)
-        sns.barplot(data = dataframe, x = df['quality'], y = dataframe[i], palette=palette1).set(title = f'quality based on {[i]}')
-        n += 1
-    fig.tight_layout()
-barplot(df, ['pH','citric acid', 'volatile acidity', 'alcohol'])
-plt.savefig('barplot1.jpg', dpi = 100)
+# Load in the data
+df = pd.read_csv("WineQT.csv")
 
-barplot(df, ['residual sugar', 'fixed acidity', 'total sulfur dioxide'])
-plt.savefig('barplot of quality 2', dpi = 100)
+# Split into train and test sections
+y = df.pop("quality")
+X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2, random_state=seed)
 
-barplot(df, ['citric acid', 'sulphates', 'alcohol', 'volatile acidity'])
-plt.savefig('influence features', dpi = 100)
+#################################
+########## MODELLING ############
+#################################
 
-palette2 = sns.color_palette('RdGy')
-def densityplot(dataframe, x_plot, y_plot):
-    i = 0
-    n = 1
-    fig = plt.figure(figsize = (9,8))
-    for i in x_plot:
-        plt.subplot(len(x_plot),1, n)
-        sns.kdeplot(data = dataframe, x = dataframe[i], y = y_plot, color='green', palette=palette2, fill = True, log_scale=False)
-        n += 1
-    fig.tight_layout()
-    
-densityplot(df, ['pH','citric acid', 'volatile acidity', 'density'], None)
-plt.savefig('densityplot.jpg', dpi = 120)
-plt.close()
+# Fit a model on the train section
+regr = RandomForestRegressor(max_depth=2, random_state=seed)
+regr.fit(X_train, y_train)
 
-densityplot(df, ['residual sugar', 'fixed acidity', 'total sulfur dioxide', 'quality', 'alcohol'], None)
-plt.savefig('densityplot2.jpg', dpi = 120)
-plt.close()
+# Report training set score
+train_score = regr.score(X_train, y_train) * 100
+# Report test set score
+test_score = regr.score(X_test, y_test) * 100
 
-densityplot(df, ['alcohol', 'volatile acidity', 'sulphates', 'citric acid'], None)
-plt.savefig('densityhighestinfluence.jpg', dpi = 120)
-plt.close()
+# Write scores to a file
+with open("metrics.txt", 'w') as outfile:
+        outfile.write("Training variance explained: %2.1f%%\n" % train_score)
+        outfile.write("Test variance explained: %2.1f%%\n" % test_score)
 
-fig = plt.figure(figsize=(9,9))
-sns.heatmap(data = df.drop('Id', axis =1).corr(), cmap = 'RdYlBu', annot=True)
-fig.tight_layout()
-plt.savefig('correlationdata.jpg', dpi = 300)
-plt.close()
 
-from sklearn.preprocessing import LabelEncoder
+##########################################
+##### PLOT FEATURE IMPORTANCE ############
+##########################################
+# Calculate feature importance in random forest
+importances = regr.feature_importances_
+labels = df.columns
+feature_df = pd.DataFrame(list(zip(labels, importances)), columns = ["feature","importance"])
+feature_df = feature_df.sort_values(by='importance', ascending=False,)
 
-df2 = df.copy()
+# image formatting
+axis_fs = 18 #fontsize
+title_fs = 22 #fontsize
+sns.set(style="whitegrid")
 
-bins = (2, 6.5, 8)
-wine = ['bad', 'good']
-df2['quality'] = pd.cut(df2['quality'], bins = bins, labels  = wine)
+ax = sns.barplot(x="importance", y="feature", data=feature_df)
+ax.set_xlabel('Importance',fontsize = axis_fs) 
+ax.set_ylabel('Feature', fontsize = axis_fs)#ylabel
+ax.set_title('Random forest\nfeature importance', fontsize = title_fs)
 
-encode = LabelEncoder()
-df2['quality_code'] = encode.fit_transform(df2['quality'])
-
-fig = plt.figure(figsize = (7,7))
-sns.countplot(df2, x = df2['quality'])
-plt.savefig('countplot.jpg', dpi = 120)
+plt.tight_layout()
+plt.savefig("feature_importance.png",dpi=120) 
 plt.close()
 
 
-# Seperate Dataset
-X = df2.drop(['quality', 'quality_code'], axis = 1)
-y = df2['quality_code']
+##########################################
+############ PLOT RESIDUALS  #############
+##########################################
 
-from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
-X_train, X_test, y_train, y_test = train_test_split(X,y,random_state=42)
+y_pred = regr.predict(X_test) + np.random.normal(0,0.25,len(y_test))
+y_jitter = y_test + np.random.normal(0,0.25,len(y_test))
+res_df = pd.DataFrame(list(zip(y_jitter,y_pred)), columns = ["true","pred"])
 
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
-#def evaluation_score (test_var, prediction = rfc.predict(X_tst_sc)):
-#    rfc_acc = accuracy_score(test_var, prediction)
-#    conf_mat = confusion_matrix(test_var, prediction)
-#    plt.figure(figsize = (4,4))
-#    sns.heatmap(conf_mat, annot = True)
-#    print(f'accuracy score of Random Forest Classifier model is {rfc_acc}')
-#    print(classification_report(test_var, prediction))
+ax = sns.scatterplot(x="true", y="pred",data=res_df)
+ax.set_aspect('equal')
+ax.set_xlabel('True wine quality',fontsize = axis_fs) 
+ax.set_ylabel('Predicted wine quality', fontsize = axis_fs)#ylabel
+ax.set_title('Residuals', fontsize = title_fs)
 
-prediction = rfc.predict(X_tst_sc)
-rfc_acc = accuracy_score(y_test, prediction)
-conf_mat = confusion_matrix(y_test, prediction)
+# Make it pretty- square aspect ratio
+ax.plot([1, 10], [1, 10], 'black', linewidth=1)
+plt.ylim((2.5,8.5))
+plt.xlim((2.5,8.5))
 
-with open('accuracy.txt','w') as outfile:
-    outfile.write(f'Accuracy of the model is: {rfc_acc}')
-
-with open('classfication_report','w') as outfile:
-    outfile.write(classification_report(y_test, prediction)
-
-sns.heatmap(conf_mat, annot = True)
-plt.savefig('confusion_mat.jpg', dpi = 100)
-plt.close
-
+plt.tight_layout()
+plt.savefig("residuals.png",dpi=120) 
