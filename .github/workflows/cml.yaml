@@ -13,7 +13,7 @@ jobs:
 
           # This is ML workflow
           pip install -r requirements.txt
-          python train.py  # generate plot.png
+          python wine.py  # generate plot.png
           echo "Model Metrics" > report.md
           cat metrics.txt >> report.md
 
