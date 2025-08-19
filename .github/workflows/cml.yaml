@@ -7,9 +7,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: cml_run
-      - env:
+        env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-      - run: |
+        run: |
 
           # This is ML workflow
           pip install -r requirements.txt
