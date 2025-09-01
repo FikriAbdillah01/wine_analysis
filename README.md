@@ -197,7 +197,7 @@ Based on an analysis, we recommend that:
 3. We suggest to add size and some features such as the price of the wine and age of the wine to create more, new insight, recommendations, and accurate prediction. 
 
 
-### Refrences
+### References
 
 - [Puckette,  Madeline.  What  is  Residual  Sugar  in  Wine?.2020.](https://winefolly.com/deep-dive/what-is-residual-sugar-in-wine/)
 
